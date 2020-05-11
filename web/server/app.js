@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
@@ -12,6 +11,8 @@ dotenv.config();
 // routers
 const indexRouter = require('./routes/index');
 const clientRouter = require('./routes/client/client');
+const userRouter = require('./routes/user/user');
+const clientServiceRouter = require('./routes/user/clientservice');
 
 // create app
 const app = express();
@@ -26,6 +27,8 @@ app.use(cookieParser());
 // routes
 app.use('/', indexRouter);
 app.use('/client', clientRouter);
+app.use('/user', userRouter);
+app.use('/user/client', clientServiceRouter);
 
 // connect to mongoose
 mongoose.connect(process.env.MONGODB_CON, {useNewUrlParser: true}, () => {
