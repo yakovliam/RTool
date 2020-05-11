@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8b60d607-ac4c-4737-94a7-0c79a66cd94f" name="Default Changelist" comment="" />
+    <list default="true" id="8b60d607-ac4c-4737-94a7-0c79a66cd94f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/client/client.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/client/client.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
   <component name="ProjectId" id="1bkD4eWFlo1AXE32orSikzfwh41" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -15,6 +23,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="javascript.nodejs.core.library.configured.version" value="13.12.0" />
     <property name="nodejs_interpreter_path" value="node" />
@@ -43,7 +52,8 @@
       <option name="presentableId" value="Default" />
       <updated>1589167007950</updated>
       <workItem from="1589167009348" duration="134000" />
-      <workItem from="1589167167947" duration="2788000" />
+      <workItem from="1589167167947" duration="3106000" />
+      <workItem from="1589209763851" duration="968000" />
     </task>
     <servers />
   </component>
@@ -55,22 +65,22 @@
       <screen x="67" y="27" width="1853" height="1053" />
     </state>
     <state x="726" y="301" width="524" height="502" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/67.27.1853.1053@67.27.1853.1053" timestamp="1589167369532" />
-    <state width="1830" height="255" key="GridCell.Tab.0.bottom" timestamp="1589170132901">
+    <state width="1830" height="255" key="GridCell.Tab.0.bottom" timestamp="1589210732085">
       <screen x="67" y="27" width="1853" height="1053" />
     </state>
-    <state width="1830" height="255" key="GridCell.Tab.0.bottom/67.27.1853.1053@67.27.1853.1053" timestamp="1589170132901" />
-    <state width="1830" height="255" key="GridCell.Tab.0.center" timestamp="1589170132899">
+    <state width="1830" height="255" key="GridCell.Tab.0.bottom/67.27.1853.1053@67.27.1853.1053" timestamp="1589210732085" />
+    <state width="1830" height="255" key="GridCell.Tab.0.center" timestamp="1589210732084">
       <screen x="67" y="27" width="1853" height="1053" />
     </state>
-    <state width="1830" height="255" key="GridCell.Tab.0.center/67.27.1853.1053@67.27.1853.1053" timestamp="1589170132899" />
-    <state width="1830" height="255" key="GridCell.Tab.0.left" timestamp="1589170132898">
+    <state width="1830" height="255" key="GridCell.Tab.0.center/67.27.1853.1053@67.27.1853.1053" timestamp="1589210732084" />
+    <state width="1830" height="255" key="GridCell.Tab.0.left" timestamp="1589210732084">
       <screen x="67" y="27" width="1853" height="1053" />
     </state>
-    <state width="1830" height="255" key="GridCell.Tab.0.left/67.27.1853.1053@67.27.1853.1053" timestamp="1589170132898" />
-    <state width="1830" height="255" key="GridCell.Tab.0.right" timestamp="1589170132900">
+    <state width="1830" height="255" key="GridCell.Tab.0.left/67.27.1853.1053@67.27.1853.1053" timestamp="1589210732084" />
+    <state width="1830" height="255" key="GridCell.Tab.0.right" timestamp="1589210732084">
       <screen x="67" y="27" width="1853" height="1053" />
     </state>
-    <state width="1830" height="255" key="GridCell.Tab.0.right/67.27.1853.1053@67.27.1853.1053" timestamp="1589170132900" />
+    <state width="1830" height="255" key="GridCell.Tab.0.right/67.27.1853.1053@67.27.1853.1053" timestamp="1589210732084" />
     <state x="656" y="257" width="672" height="678" key="search.everywhere.popup" timestamp="1589168236925">
       <screen x="67" y="27" width="1853" height="1053" />
     </state>

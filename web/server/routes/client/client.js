@@ -4,7 +4,7 @@ const router = express.Router();
 // client model
 const Client = require('../../model/Client');
 
-router.get('/update', isAuthenticated, function (req, res, next) {
+router.get('/update', isAuthenticated, async function (req, res, next) {
     const client = res.locals.client;
 
     // if nonexistent client (how..??)
@@ -13,15 +13,12 @@ router.get('/update', isAuthenticated, function (req, res, next) {
     // return queued messages, then remove those messages from the client object
     const queuedMessages = client.queuedMessages;
 
-    // if no queued messages, return empty array
-    if (!queuedMessages) {
-        return res.send({response: []});
-    }
-
-    // remove those queued messages from actual db
-    client.queuedMessages = [];
-    // save in db
-    client.save();
+    // remove those queued messages from actual db and save
+    await Client.update({_id: client._id, clientId: client.clientId}, {
+        queuedMessages: []
+    });
+    // clear client var
+    res.locals.client = undefined;
 
     return res.send({response: queuedMessages});
 });
