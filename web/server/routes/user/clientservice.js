@@ -8,12 +8,12 @@ const User = require('../../model/User');
 const Client = require('../../model/Client');
 const Message = require('../../model/Message');
 
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
     return deny(req, res, "Access Denied.");
 });
 
 // create a new client to watch
-router.get('/create', verifyToken, async (req, res, next) => {
+router.post('/create', verifyToken, async (req, res, next) => {
     const user = req.user;
 
     if (!user) return badRequest(req, res, "An error has occurred! We could not retrieve your profile");
@@ -52,7 +52,7 @@ router.get('/create', verifyToken, async (req, res, next) => {
 });
 
 // queue a command for a client
-router.get('/queue', verifyToken, async (req, res, next) => {
+router.post('/queue', verifyToken, async (req, res, next) => {
     const user = req.user;
 
     if (!user) return badRequest(req, res, "An error has occurred! We could not retrieve your profile");

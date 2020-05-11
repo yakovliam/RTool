@@ -1,0 +1,7 @@
+creds:
+  clientId: "idHere"
+  clientToken: "tokenHere"
+server:
+  baseUrl: "http://localhost:3000/client"
+checker:
+  delayBetweenChecksSeconds: 10

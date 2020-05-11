@@ -9,17 +9,17 @@ const User = require('../../model/User');
 // validation
 const Validate = require('../../validation/Validate');
 
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
     return deny(req, res, "Access Denied.");
 });
 
-router.get('/logout', async (req, res) => {
+router.post('/logout', async (req, res) => {
     res.clearCookie("token");
     res.cookie('token', {maxAge: Date.now()});
     return res.status(200).send("Logged out.");
 });
 
-router.get('/get', async (req, res) => {
+router.post('/get', async (req, res) => {
 
     // get JWT token for session
     const token = req.cookies.token;
@@ -53,7 +53,7 @@ router.get('/get', async (req, res) => {
     return res.status(200).send({response: {_id: user._id, username: user.username, date: user.date}});
 });
 
-router.get('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
@@ -95,7 +95,7 @@ router.get('/login', async (req, res) => {
     res.cookie("token", token, {httpOnly: true}).status(200).send({id: user._id}); // send cookie along w/ it (http ONLY for security)
 });
 
-router.get('/register', async (req, res) => {
+router.post('/register', async (req, res) => {
 
     const email = req.body.email;
     const username = req.body.username;

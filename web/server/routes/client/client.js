@@ -5,7 +5,7 @@ const router = express.Router();
 const Client = require('../../model/Client');
 const Message = require('../../model/Message');
 
-router.get('/update', isAuthenticated, async function (req, res, next) {
+router.post('/update', isAuthenticated, async function (req, res, next) {
     const client = res.locals.client;
 
     // if nonexistent client (how..??)
@@ -27,7 +27,7 @@ router.get('/update', isAuthenticated, async function (req, res, next) {
     return res.send({response: message});
 });
 
-router.get('/respond', isAuthenticated, async function (req, res, next) {
+router.post('/respond', isAuthenticated, async function (req, res, next) {
     const client = res.locals.client;
 
     // if nonexistent client (how..??)
@@ -73,15 +73,15 @@ async function isAuthenticated(req, res, next) {
     const clientId = req.body.clientId;
     const clientToken = req.body.clientToken;
 
-    if (!clientId || !clientToken) return deny(req, res);
+    if (!clientId || !clientToken) return deny(req, res, "Invalid clientId or clientToken");
 
     // query database for clientId
     const client = await Client.findOne({clientId: clientId});
 
-    if (!client) return deny(req, res);
+    if (!client) return deny(req, res, "Invalid clientId or clientToken");
 
     // check to see if token matches
-    if (client.clientToken !== clientToken) return deny(req, res);
+    if (client.clientToken !== clientToken) return deny(req, res, "Invalid clientId or clientToken");
 
     // set client
     res.locals.client = client;
