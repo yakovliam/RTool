@@ -90,7 +90,9 @@ public class MessageChecker {
 
             String response = new String(responseBody);
 
-            System.out.println("Response > " + response);
+            // if status code 200, go ahead and parse the action
+            if (statusCode == HttpStatus.SC_OK)
+                RToolClient.getInstance().getActionQueue().queue(new JSONObject(response).getJSONObject("response"));
 
         } catch (IOException e) {
             e.printStackTrace();
