@@ -1,0 +1,15 @@
+{
+  "name": "rtmp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "node-media-server": "^2.1.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "yakovliam",
+  "license": "ISC"
+}

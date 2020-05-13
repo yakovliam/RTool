@@ -1,26 +1,70 @@
 const express = require('express');
 const router = express.Router();
 
-// client model
+// models
 const Client = require('../../model/Client');
+const Message = require('../../model/Message');
 
-router.get('/update', isAuthenticated, async function (req, res, next) {
+router.post('/update', isAuthenticated, async function (req, res, next) {
     const client = res.locals.client;
 
     // if nonexistent client (how..??)
     if (!client) return deny(req, res);
 
-    // return queued messages, then remove those messages from the client object
-    const queuedMessages = client.queuedMessages;
+    // search for a [ still queued, clientId, creator ]
+    const message = await Message.findOne({creator: client.creator, queued: true, clientId: client.clientId});
 
-    // remove those queued messages from actual db and save
-    await Client.update({_id: client._id, clientId: client.clientId}, {
-        queuedMessages: []
+    // if nonexistent, return
+    if (!message) return badRequest(req, res, "No messages");
+
+    // received message, so now update with date, and set queued to false because it was received
+    await Message.updateOne(
+        {_id: message._id},
+        {$set: {"dateReceived": new Date(), queued: false}}
+    );
+
+    // return message
+    return res.send({response: message});
+});
+
+router.post('/respond', isAuthenticated, async function (req, res, next) {
+    const client = res.locals.client;
+
+    // if nonexistent client (how..??)
+    if (!client) return deny(req, res);
+
+    // get clientId
+    const clientId = client.clientId;
+    // get creator
+    const creator = client.creator;
+
+    // get message id
+    const messageId = req.body.messageId;
+
+    // get response
+    const response = req.body.response;
+
+    if (!messageId || !response) return badRequest(req, res, "Invalid parameters");
+
+    // get response to message object
+    const responseTo = await Message.findOne({
+        messageId: messageId,
+        creator: creator,
+        clientId: clientId,
+        response: undefined
     });
-    // clear client var
-    res.locals.client = undefined;
 
-    return res.send({response: queuedMessages});
+    // if nonexistent, return
+    if (!responseTo) return badRequest(req, res, "No message to respond to");
+
+    // set response and queued to false
+    await Message.update(
+        {_id: responseTo._id},
+        {$set: {response: response}}
+    );
+
+    // send
+    return res.send({response: "Responded"});
 });
 
 async function isAuthenticated(req, res, next) {
@@ -29,15 +73,15 @@ async function isAuthenticated(req, res, next) {
     const clientId = req.body.clientId;
     const clientToken = req.body.clientToken;
 
-    if (!clientId || !clientToken) return deny(req, res);
+    if (!clientId || !clientToken) return deny(req, res, "Invalid clientId or clientToken");
 
     // query database for clientId
     const client = await Client.findOne({clientId: clientId});
 
-    if (!client) return deny(req, res);
+    if (!client) return deny(req, res, "Invalid clientId or clientToken");
 
     // check to see if token matches
-    if (client.clientToken !== clientToken) return deny(req, res);
+    if (client.clientToken !== clientToken) return deny(req, res, "Invalid clientId or clientToken");
 
     // set client
     res.locals.client = client;
@@ -45,8 +89,11 @@ async function isAuthenticated(req, res, next) {
     return next();
 }
 
-function deny(req, res) {
-    res.status(403).send({response: "Access Denied."});
+// misc functions
+const badRequest = async (req, res, message) => {
+    res.status(400).send({response: message});
 }
-
+const deny = async (req, res, message) => {
+    res.status(403).send({response: message});
+}
 module.exports = router;
