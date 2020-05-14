@@ -11,8 +11,12 @@ router.post('/update', isAuthenticated, async function (req, res, next) {
     // if nonexistent client (how..??)
     if (!client) return deny(req, res);
 
-    // search for a [ still queued, clientId, creator ]
-    const message = await Message.findOne({creator: client.creator, queued: true, clientId: client.clientId});
+    // search for a [ still queued, clientId, creator ] --- ALSO FIND IT BY MOST RECENT
+    const message = await Message.find({
+        creator: client.creator,
+        queued: true,
+        clientId: client.clientId
+    }).sort({dateSent: -1});
 
     // if nonexistent, return
     if (!message) return badRequest(req, res, "No messages");

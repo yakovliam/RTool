@@ -75,14 +75,49 @@ router.post('/queue', verifyToken, async (req, res, next) => {
 
     if (!messages) return badRequest(req, res, "You have not provided a message");
 
+    let messageObjects = [];
+
     // for each message, create a new Message.js object
     for (let key in messages) {
         // create new "message" object
-        Message.create({creator: user._id, clientId: clientId, message: key})
+        messageObjects.push(await Message.create({creator: user._id, clientId: clientId, message: key}));
     }
 
     // finished! Tell em it was all god
-    res.status(200).send({response: "Queued new message"});
+    res.status(200).send({response: {result: "Queued new message", messages: [messageObjects]}});
+});
+
+// get the message to a command for a client
+router.post('/getmessage', verifyToken, async (req, res, next) => {
+    const user = req.user;
+
+    if (!user) return badRequest(req, res, "An error has occurred! We could not retrieve your profile");
+
+    // get handle and other info
+    const clientId = req.body.clientId;
+
+    // if one of them isn't preset, badRequest it
+    if (!clientId) return badRequest(req, res, "Invalid parameters");
+
+    // make sure one exists with that id
+    const existingClient = await Client.findOne(
+        {clientId: clientId, creator: user._id}
+    );
+
+    if (!existingClient) return badRequest(req, res, "A client that you own with that clientId does not exist");
+
+    // get message
+    const messageId = req.body.messageId;
+
+    if (!messageId) return badRequest(req, res, "Missing target messageId");
+
+    // query db to find message with that Id (and clientId)
+    const targetMessage = await Message.findOne({clientId: clientId, messageId: messageId});
+
+    if (!targetMessage) return badRequest(req, res, "No message with that messageId and clientId found");
+
+    // got the message, so let's just return the entire thing (because it has the data!)
+    res.status(200).send({response: targetMessage});
 });
 
 // verify token
@@ -122,10 +157,10 @@ async function verifyToken(req, res, next) {
 // misc functions
 const badRequest = async (req, res, message) => {
     res.status(400).send({response: message});
-}
+};
 const deny = async (req, res, message) => {
     res.status(403).send({response: message});
-}
+};
 
 
 module.exports = router;
