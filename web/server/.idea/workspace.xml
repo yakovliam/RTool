@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8b60d607-ac4c-4737-94a7-0c79a66cd94f" name="Default Changelist" comment="" />
+    <list default="true" id="8b60d607-ac4c-4737-94a7-0c79a66cd94f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../client/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../client/src/components/auth/Authentication.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../client/src/components/button/Login.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../client/src/components/scene/home/Home.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../client/src/components/scene/login/Login.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../client/src/components/scene/protected/Protected.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../client/src/components/static/HeaderComponent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../client/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../client/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../client/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/public/logo192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/public/logo512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/../client/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../client/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/src/App.test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/src/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../client/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,6 +74,7 @@
       <workItem from="1589209763851" duration="968000" />
       <workItem from="1589341132163" duration="787000" />
       <workItem from="1589424987018" duration="712000" />
+      <workItem from="1589428314372" duration="1110000" />
     </task>
     <servers />
   </component>
