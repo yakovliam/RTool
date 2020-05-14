@@ -8,3 +8,5 @@ How it works:
 - Run the stub on the remote machine
 - Wait for the stub to make contact with the web panel
 - Manage the entire machine from an interactive API-based reverse webhook control panel
+
+As of right now, the master branch serves as a development branch because the project is incomplete. When the project is complete, the development commits, builds, and releases will be moved to "dev".
