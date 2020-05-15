@@ -11,17 +11,42 @@ import {
     Link
 } from "react-router-dom";
 
-// components
-import Home from "./components/scene/home/Home";
-
 // ui
 import Typography from "@material-ui/core/Typography";
+import {createMuiTheme} from '@material-ui/core/styles';
+import purple from '@material-ui/core/colors/purple';
+import green from '@material-ui/core/colors/green';
+import {ThemeProvider, useTheme} from '@material-ui/core/styles';
+
+// components
+import Home from "./components/scene/home/Home";
 import Login from "./components/scene/login/Login";
 import Protected from "./components/scene/protected/Protected";
 import Authentication from "./components/auth/Authentication";
-import HeaderComponent from "./components/static/HeaderComponent";
+import HeaderComponent from "./components/static/header/HeaderComponent";
+
+// define theme here
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            main: "#005FAB"
+        },
+        secondary: green,
+    },
+    status: {
+        danger: 'orange',
+    },
+});
 
 function App() {
+    return (
+        <ThemeProvider theme={theme}>
+            <AppRouter/>
+        </ThemeProvider>
+    );
+}
+
+function AppRouter() {
     return (
         <Router>
             <div>
