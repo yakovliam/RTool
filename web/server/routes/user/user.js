@@ -64,7 +64,6 @@ router.post('/login', async (req, res) => {
     // -------------------- VALIDATE -----------------------
 
     /* does it comply with general validation? */
-
     const {error} = Validate.loginSchema.validate({email: email, password: password});
     if (error) {
         return badRequest(req, res, error.details[0].message);
@@ -82,7 +81,7 @@ router.post('/login', async (req, res) => {
     /* check password */
 
     const isValidPassword = await bcrypt.compare(password, user.password);
-    if (!isValidPassword) deny(req, res, "Incorrect Email or Password!");
+    if (!isValidPassword) return deny(req, res, "Incorrect Email or Password!");
 
     // -------------------- VALIDATE -----------------------
 
@@ -92,7 +91,7 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
 
     // set token as header
-    res.cookie("token", token, {httpOnly: true}).status(200).send({id: user._id}); // send cookie along w/ it (http ONLY for security)
+    return res.cookie("token", token, {httpOnly: true}).status(200).send({id: user._id}); // send cookie along w/ it (http ONLY for security)
 });
 
 router.post('/register', async (req, res) => {

@@ -4,6 +4,7 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 // config for .env files
 dotenv.config();
@@ -18,6 +19,15 @@ const clientServiceRouter = require('./routes/user/clientservice');
 const app = express();
 
 // middleWares
+const corsOptions = {
+    allRoutes: true,
+    origin: 'http://localhost:3001',
+    credentials: true,
+    methods: 'GET, POST, PUT, DELETE, OPTIONS, HEAD',
+    headers: 'content-type'
+};
+
+app.use(cors(corsOptions));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
