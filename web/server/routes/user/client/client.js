@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 const sanitize = require('mongo-sanitize');
 
 // models
-const User = require('../../model/user');
-const Client = require('../../model/client');
+const User = require('../../../model/user');
+const Client = require('../../../model/client');
 
 router.post('/', async (req, res) => {
     return deny(req, res, "Access Denied.");

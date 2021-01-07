@@ -6,8 +6,12 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 
+// routers
+const userRouter = require('./routes/user/user');
+const clientRouter = require('./routes/user/client/client');
+
 // initialize env (if applicable)
-dotenv.config()
+dotenv.config();
 
 // create app
 const app = express();
@@ -34,8 +38,12 @@ app.use(bodyParser.json());
 // cookie parsing
 app.use(cookieParser());
 
+// routes
+app.use('/user', userRouter);
+app.use('/user/client', clientRouter);
+
 // connect to mongoose
-mongoose.connect(process.env.MONGODB_CON, {useNewUrlParser: true}, () => {
+mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true}, () => {
     console.log("Connected to mongodb database");
 });
 
