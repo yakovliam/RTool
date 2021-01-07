@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const sanitize = require('mongo-sanitize');
 
 // models
 const Client = require('../../model/client');
 const Message = require('../../model/message');
 
 router.post('/update', isAuthenticated, async function (req, res, next) {
-    const client = res.locals.client;
+    const client = sanitize(res.locals.client);
 
     // if nonexistent client (how..??)
     if (!client) return deny(req, res);
@@ -32,7 +33,7 @@ router.post('/update', isAuthenticated, async function (req, res, next) {
 });
 
 router.post('/respond', isAuthenticated, async function (req, res, next) {
-    const client = res.locals.client;
+    const client = sanitize(res.locals.client);
 
     // if nonexistent client (how..??)
     if (!client) return deny(req, res);
@@ -43,10 +44,10 @@ router.post('/respond', isAuthenticated, async function (req, res, next) {
     const creator = client.creator;
 
     // get message id
-    const messageId = req.body.messageId;
+    const messageId = sanitize(req.body.messageId);
 
     // get response
-    const response = req.body.response;
+    const response = sanitize(req.body.response);
 
     if (!messageId || !response) return badRequest(req, res, "Invalid parameters");
 
@@ -62,7 +63,7 @@ router.post('/respond', isAuthenticated, async function (req, res, next) {
     if (!responseTo) return badRequest(req, res, "No message to respond to");
 
     // set response and queued to false
-    await Message.update(
+    await Message.updateOne(
         {_id: responseTo._id},
         {$set: {response: response}}
     );
@@ -74,8 +75,8 @@ router.post('/respond', isAuthenticated, async function (req, res, next) {
 async function isAuthenticated(req, res, next) {
 
     /* GET CLIENT ID AND TOKEN */
-    const clientId = req.body.clientId;
-    const clientToken = req.body.clientToken;
+    const clientId = sanitize(req.body.clientId);
+    const clientToken = sanitize(req.body.clientToken);
 
     if (!clientId || !clientToken) return deny(req, res, "Invalid clientId or clientToken");
 
