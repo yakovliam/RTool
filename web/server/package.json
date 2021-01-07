@@ -3,20 +3,21 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "export NODE_ENV=dev && node ./bin/www",
+    "prod": "export NODE_ENV=prod && node ./bin/www"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
+    "bcrypt": "^5.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
-    "cookie-parser": "~1.4.4",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
-    "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "express": "~4.16.1",
     "jsonwebtoken": "^8.5.1",
     "mongo-sanitize": "^1.1.0",
-    "mongoose": "^5.9.13",
-    "morgan": "~1.9.1"
+    "mongoose": "^5.11.10",
+    "morgan": "^1.10.0"
   }
 }

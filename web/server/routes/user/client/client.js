@@ -2,18 +2,18 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const sanitize = require('mongo-sanitize');
-const bcrypt = require('bcryptjs');
 
 // models
 const User = require('../../model/user');
 const Client = require('../../model/client');
-const Message = require('../../model/message');
 
 router.post('/', async (req, res) => {
     return deny(req, res, "Access Denied.");
 });
 
-// create a new client to watch
+/**
+ * Create a client
+ */
 router.post('/create', verifyToken, async (req, res, next) => {
     const user = sanitize(req.user);
 
@@ -52,21 +52,53 @@ router.post('/create', verifyToken, async (req, res, next) => {
     res.status(200).send({response: "Created"});
 });
 
-// queue a command for a client
+/**
+ * Delete a client
+ */
+router.delete('/delete', verifyToken, async (req, res, next) => {
+    const user = sanitize(req.user);
+
+    if (!user) return badRequest(req, res, "An error has occurred! We could not retrieve your profile");
+
+    // get handle and other info
+    const handle = sanitize(req.body.handle);
+    const clientId = sanitize(req.body.clientId);
+
+    // if one of them isn't preset, badRequest it
+    if (!handle || !clientId) return badRequest(req, res, "Invalid parameters");
+
+    // get existing client that the user has created
+    const existingClient = await Client.findOne(
+        {clientId: clientId, handle: handle, creator: user._id}
+    );
+
+    if (!existingClient) return badRequest(req, res, "A client with either that handle or clientId does not exist exists");
+
+    // create new object
+    await Client.findByIdAndDelete(existingClient._id);
+
+    // finished! Tell em it was all god
+    res.status(200).send({response: "Deleted"});
+});
+
+/**
+ * Queue a command to be sent to a client
+ */
 router.post('/queue', verifyToken, async (req, res, next) => {
     const user = sanitize(req.user);
 
     if (!user) return badRequest(req, res, "An error has occurred! We could not retrieve your profile");
 
     // get handle and other info
+    const handle = sanitize(req.body.handle);
     const clientId = sanitize(req.body.clientId);
 
     // if one of them isn't preset, badRequest it
-    if (!clientId) return badRequest(req, res, "Invalid parameters");
+    if (!clientId || !handle) return badRequest(req, res, "Invalid parameters");
 
     // make sure one exists with that id
     const existingClient = await Client.findOne(
-        {clientId: clientId, creator: user._id}
+        {clientId: clientId, handle: handle, creator: user._id}
     );
 
     if (!existingClient) return badRequest(req, res, "A client that you own with that clientId does not exist");
@@ -76,52 +108,19 @@ router.post('/queue', verifyToken, async (req, res, next) => {
 
     if (!messages) return badRequest(req, res, "You have not provided a message");
 
-    let messageObjects = [];
-
-    // for each message, create a new message.js object
-    for (let key in messages) {
-        // create new "message" object
-        messageObjects.push(await Message.create({creator: user._id, clientId: clientId, message: key}));
-    }
+    //TODO send message through sockets (array, so loop)
 
     // finished! Tell em it was all god
-    res.status(200).send({response: {result: "Queued new message", messages: [messageObjects]}});
+    res.status(200).send({response: {result: "Queued new message", messages: messages}});
 });
 
-// get the message to a command for a client
-router.post('/getmessage', verifyToken, async (req, res, next) => {
-    const user = sanitize(req.user);
-
-    if (!user) return badRequest(req, res, "An error has occurred! We could not retrieve your profile");
-
-    // get handle and other info
-    const clientId = sanitize(req.body.clientId);
-
-    // if one of them isn't preset, badRequest it
-    if (!clientId) return badRequest(req, res, "Invalid parameters");
-
-    // make sure one exists with that id
-    const existingClient = await Client.findOne(
-        {clientId: clientId, creator: user._id}
-    );
-
-    if (!existingClient) return badRequest(req, res, "A client that you own with that clientId does not exist");
-
-    // get message
-    const messageId = sanitize(req.body.messageId);
-
-    if (!messageId) return badRequest(req, res, "Missing target messageId");
-
-    // query db to find message with that Id (and clientId)
-    const targetMessage = await Message.findOne({clientId: clientId, messageId: messageId});
-
-    if (!targetMessage) return badRequest(req, res, "No message with that messageId and clientId found");
-
-    // got the message, so let's just return the entire thing (because it has the data!)
-    res.status(200).send({response: targetMessage});
-});
-
-// verify token
+/**
+ * Verify a token
+ * @param req the request
+ * @param res the response
+ * @param next the {next} function
+ * @returns {Promise<void>}
+ */
 async function verifyToken(req, res, next) {
 
     // get JWT token for session
@@ -155,10 +154,16 @@ async function verifyToken(req, res, next) {
     next();
 }
 
-// misc functions
+/**
+ * Utility functions
+ */
+
+// Bad request
 const badRequest = async (req, res, message) => {
     res.status(400).send({response: message});
 };
+
+// Deny access
 const deny = async (req, res, message) => {
     res.status(403).send({response: message});
 };

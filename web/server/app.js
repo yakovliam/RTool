@@ -1,24 +1,18 @@
 const express = require('express');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const bodyParser = require('body-parser');
 const cors = require('cors');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
 
-// config for .env files
-dotenv.config();
-
-// routers
-const indexRouter = require('./routes/index');
-const clientRouter = require('./routes/client/client');
-const userRouter = require('./routes/user/user');
-const clientServiceRouter = require('./routes/user/clientservice');
+// initialize env (if applicable)
+dotenv.config()
 
 // create app
 const app = express();
 
-// middleWares
+// middleware
 const corsOptions = {
     allRoutes: true,
     origin: 'http://localhost:3001',
@@ -27,22 +21,22 @@ const corsOptions = {
     headers: 'content-type'
 };
 
+// cors
 app.use(cors(corsOptions));
+// dev logger
 app.use(logger('dev'));
+// json
 app.use(express.json());
+// url encoding
 app.use(express.urlencoded({extended: false}));
+// body parsing
 app.use(bodyParser.json());
+// cookie parsing
 app.use(cookieParser());
-
-// routes
-app.use('/', indexRouter);
-app.use('/client', clientRouter);
-app.use('/user', userRouter);
-app.use('/user/client', clientServiceRouter);
 
 // connect to mongoose
 mongoose.connect(process.env.MONGODB_CON, {useNewUrlParser: true}, () => {
-    console.log("Connected to mongodb database.");
+    console.log("Connected to mongodb database");
 });
 
 module.exports = app;

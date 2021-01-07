@@ -10,16 +10,23 @@ const User = require('../../model/user');
 // validation
 const Validate = require('../../validation/validate');
 
-router.post('/', async (req, res) => {
-    return deny(req, res, "Access Denied.");
-});
+// temporary commented out
+// router.post('/', async (req, res) => {
+//     return deny(req, res, "Access Denied.");
+// });
 
+/**
+ * Logout
+ */
 router.post('/logout', async (req, res) => {
     res.clearCookie("token");
     res.cookie('token', {maxAge: Date.now()});
     return res.status(200).send("Logged out.");
 });
 
+/**
+ * Get user data
+ */
 router.post('/get', async (req, res) => {
 
     // get JWT token for session
@@ -54,6 +61,9 @@ router.post('/get', async (req, res) => {
     return res.status(200).send({response: {_id: user._id, username: user.username, date: user.date}});
 });
 
+/**
+ * Login
+ */
 router.post('/login', async (req, res) => {
     const email = sanitize(req.body.email);
     const password = sanitize(req.body.password);
@@ -95,6 +105,9 @@ router.post('/login', async (req, res) => {
     return res.cookie("token", token, {httpOnly: true}).status(200).send({id: user._id}); // send cookie along w/ it (http ONLY for security)
 });
 
+/**
+ * Register a new user
+ */
 router.post('/register', async (req, res) => {
 
     const email = sanitize(req.body.email);
@@ -141,13 +154,18 @@ router.post('/register', async (req, res) => {
     res.status(200).send({id: user._id});
 });
 
+/**
+ * Utility functions
+ */
 
-// misc functions
+// Bad request
 const badRequest = async (req, res, message) => {
     res.status(400).send({response: message});
-}
+};
+
+// Deny access
 const deny = async (req, res, message) => {
     res.status(403).send({response: message});
-}
+};
 
 module.exports = router;
