@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const sanitize = require('mongo-sanitize');
 
 // models
 const User = require('../../model/user');
@@ -22,7 +23,7 @@ router.post('/logout', async (req, res) => {
 router.post('/get', async (req, res) => {
 
     // get JWT token for session
-    const token = req.cookies.token;
+    const token = sanitize(req.cookies.token);
 
     if (!token) {
         return deny(req, res, "Invalid token!");
@@ -54,8 +55,8 @@ router.post('/get', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
+    const email = sanitize(req.body.email);
+    const password = sanitize(req.body.password);
 
     if (!email || !password) {
         return badRequest(req, res, "Incorrect fields!");
@@ -96,9 +97,9 @@ router.post('/login', async (req, res) => {
 
 router.post('/register', async (req, res) => {
 
-    const email = req.body.email;
-    const username = req.body.username;
-    const password = req.body.password;
+    const email = sanitize(req.body.email);
+    const username = sanitize(req.body.username);
+    const password = sanitize(req.body.password);
 
     if (!email || !username || !password) {
         return badRequest(req, res, "Incorrect fields!");
