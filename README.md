@@ -1,5 +1,5 @@
 # RTool
-Remote administration tool controlled through a web panel. Stub/Client built in Java.
+Remote administration tool controlled through a web panel. Stub/Client built in Python.
 
 The goal of this project is to provide a simple and robust framework for managing and monitoring remote computers (cross platform, MacOS, Windows, Linux) using an interactive web panel and stub builder.
 
@@ -26,13 +26,11 @@ Technologies Used
         - Vue (Bootstrap-Vue)
 - Client-Side Stub
     - Python
-    
+
 > Altogether `MEVN` stack + Python for client-side communication
-    
+
 
 Readme
 --
 
 As of right now, the master branch serves as a development branch because the project is incomplete. When the project is complete, the development commits, builds, and releases will be moved to "dev".
-
-Currently switching to Python (from Java) for the client.
