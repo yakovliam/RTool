@@ -23,14 +23,16 @@ Technologies Used
         - Node.js
 - Web Panel
     - Viewing Engine
-        - React (Create React App)
+        - Vue (Bootstrap-Vue)
 - Client-Side Stub
-    - Java
+    - Python
     
-> Altogether `MERN` stack + Java for client-side communication
+> Altogether `MEVN` stack + Python for client-side communication
     
 
 Readme
 --
 
 As of right now, the master branch serves as a development branch because the project is incomplete. When the project is complete, the development commits, builds, and releases will be moved to "dev".
+
+Currently switching to Python (from Java) for the client.
