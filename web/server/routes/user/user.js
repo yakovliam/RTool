@@ -4,10 +4,10 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 // models
-const User = require('../../model/User');
+const User = require('../../model/user');
 
 // validation
-const Validate = require('../../validation/Validate');
+const Validate = require('../../validation/validate');
 
 router.post('/', async (req, res) => {
     return deny(req, res, "Access Denied.");

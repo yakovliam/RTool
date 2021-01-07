@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 // models
-const Client = require('../../model/Client');
-const Message = require('../../model/Message');
+const Client = require('../../model/client');
+const Message = require('../../model/message');
 
 router.post('/update', isAuthenticated, async function (req, res, next) {
     const client = res.locals.client;

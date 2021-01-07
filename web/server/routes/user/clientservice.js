@@ -4,9 +4,9 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 // models
-const User = require('../../model/User');
-const Client = require('../../model/Client');
-const Message = require('../../model/Message');
+const User = require('../../model/user');
+const Client = require('../../model/client');
+const Message = require('../../model/message');
 
 router.post('/', async (req, res) => {
     return deny(req, res, "Access Denied.");
@@ -77,7 +77,7 @@ router.post('/queue', verifyToken, async (req, res, next) => {
 
     let messageObjects = [];
 
-    // for each message, create a new Message.js object
+    // for each message, create a new message.js object
     for (let key in messages) {
         // create new "message" object
         messageObjects.push(await Message.create({creator: user._id, clientId: clientId, message: key}));
