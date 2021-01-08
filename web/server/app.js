@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const socket_io = require('socket.io');
 const mongoSanitize = require('express-mongo-sanitize');
+const rateLimit = require("express-rate-limit");
 
 // routers
 const userRouter = require('./routes/user/user');
@@ -18,6 +19,16 @@ dotenv.config();
 
 // create app
 const app = express();
+
+// use rate limiting
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // limit each IP to 100 requests per windowMs
+    // default message is "Too many requests, please try again later."
+});
+
+//  apply to all requests
+app.use(limiter);
 
 // middleware
 const corsOptions = {
