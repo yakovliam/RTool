@@ -5,15 +5,8 @@ let clients = new Map();
 
 module.exports = function (io) {
 
-    const clientNamespace = io.of('/client');
-
-    clientNamespace.use((socket, next) => {
-        // ensure the user has sufficient rights
-        next();
-    });
-
     // connection
-    clientNamespace.on('connection', function (socket) {
+    io.on('connection', function (socket) {
         // add client to map
         clients.set(socket.id, socket);
 

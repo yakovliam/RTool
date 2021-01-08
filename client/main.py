@@ -18,13 +18,13 @@ __email__ = "jacob@yakovliam.com"
 __status__ = "Development"
 
 # tasker
-import tasker
+import client
 
 
 def main():
     print("Initializing")
     # go
-    tasker.do()
+    client.start()
 
 
 if __name__ == '__main__':
