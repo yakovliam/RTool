@@ -117,7 +117,7 @@ def start():
             log.log(log.LogType.ERROR,
                     "There was an error while trying to connect to the host -> " + str(e))
 
-            print(e)
+            print("There was an error while connecting to the host -> " + str(e) + " -> Retrying")
             time.sleep(cfg["connectionDelay"])
             continue
 

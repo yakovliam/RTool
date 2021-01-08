@@ -33,7 +33,17 @@ def log(type, message):
 
 
 def get_logs():
-    # open file
-    with open(file, 'r') as f:
-        # return file contents
-        return json.loads(f.read())
+    try:
+        # open file
+        with open(file, 'r') as f:
+            # return file contents
+            data = json.loads(f.read())
+            f.close()
+            return data
+    except Exception:
+        new_data = {"logs": []}
+        # file is incorrect or doesn't exist, so let's create/fill it with empty json
+        with open(file, 'w+') as f:
+            json.dump(new_data, f)
+            f.close()
+            return new_data
