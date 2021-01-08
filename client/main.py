@@ -1,16 +1,31 @@
-# This is a sample Python script.
+# TODO redo this whole project
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+# -*- coding: utf-8 -*-
+"""RTool Client
+
+This is the client stub for the RTool project. It acts as the endpoint for the user
+to be hosting. It connects to the server, and sends information back and forth in realtime
+using sock programming (sock.io)
+"""
+__author__ = "Yakovliam"
+__copyright__ = "Copyright 2020"
+__credits__ = ["Yakovliam"]
+
+__license__ = "WTFPL"
+__version__ = "1.0.0"
+__maintainer__ = "Yakovliam"
+__email__ = "jacob@yakovliam.com"
+__status__ = "Development"
+
+# tasker
+import tasker
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def main():
+    print("Initializing")
+    # go
+    tasker.do()
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    main()

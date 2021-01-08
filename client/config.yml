@@ -1,0 +1,4 @@
+clientId: "clientIdHere"
+clientToken: "clientToken"
+host: "http://192.168.0.166:3000"
+connectionDelay: 10

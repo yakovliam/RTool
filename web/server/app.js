@@ -5,10 +5,12 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const socket_io = require('socket.io');
 
 // routers
 const userRouter = require('./routes/user/user');
 const clientRouter = require('./routes/user/client/client');
+const indexRouter = require('./routes/index');
 
 // initialize env (if applicable)
 dotenv.config();
@@ -39,6 +41,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // routes
+app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/user/client', clientRouter);
 
@@ -46,5 +49,13 @@ app.use('/user/client', clientRouter);
 mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true}, () => {
     console.log("Connected to mongodb database");
 });
+
+/**
+ * Socket io
+ * @type {*}
+ */
+let io = socket_io();
+app.io = io;
+require('./io/socket')(io);
 
 module.exports = app;
