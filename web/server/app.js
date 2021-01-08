@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const socket_io = require('socket.io');
+const mongoSanitize = require('express-mongo-sanitize');
 
 // routers
 const userRouter = require('./routes/user/user');
@@ -34,9 +35,11 @@ app.use(logger('dev'));
 // json
 app.use(express.json());
 // url encoding
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: true}));
 // body parsing
 app.use(bodyParser.json());
+// Sanitization
+app.use(mongoSanitize());
 // cookie parsing
 app.use(cookieParser());
 

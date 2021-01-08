@@ -19,10 +19,15 @@ __status__ = "Development"
 
 # tasker
 import client
+import file.log as log
 
 
 def main():
     print("Initializing")
+
+    # log
+    log.log(log.LogType.INFO, "Started main function")
+
     # go
     client.start()
 

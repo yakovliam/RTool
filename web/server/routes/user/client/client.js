@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const sanitize = require('mongo-sanitize');
 
 // models
 const User = require('../../../model/user');
@@ -15,17 +14,18 @@ router.post('/', async (req, res) => {
  * Create a client
  */
 router.post('/create', verifyToken, async (req, res, next) => {
-    const user = sanitize(req.user);
+    const user = req.user;
 
     if (!user) return badRequest(req, res, "An error has occurred! We could not retrieve your profile");
 
     // get handle and other info
-    const handle = sanitize(req.body.handle);
-    const clientId = sanitize(req.body.clientId);
-    const clientToken = sanitize(req.body.clientToken);
+    const handle = req.body.handle;
+    const clientId = req.body.clientId;
+    const clientToken = req.body.clientToken;
 
     // if one of them isn't preset, badRequest it
     if (!handle || !clientId || !clientToken) return badRequest(req, res, "Invalid parameters");
+
 
     // make sure one didn't exist before with the same clientId OR handle
     const existingClient = await Client.findOne({
@@ -56,13 +56,13 @@ router.post('/create', verifyToken, async (req, res, next) => {
  * Delete a client
  */
 router.delete('/delete', verifyToken, async (req, res, next) => {
-    const user = sanitize(req.user);
+    const user = req.user;
 
     if (!user) return badRequest(req, res, "An error has occurred! We could not retrieve your profile");
 
     // get handle and other info
-    const handle = sanitize(req.body.handle);
-    const clientId = sanitize(req.body.clientId);
+    const handle = req.body.handle;
+    const clientId = req.body.clientId;
 
     // if one of them isn't preset, badRequest it
     if (!handle || !clientId) return badRequest(req, res, "Invalid parameters");
@@ -85,13 +85,13 @@ router.delete('/delete', verifyToken, async (req, res, next) => {
  * Queue a command to be sent to a client
  */
 router.post('/queue', verifyToken, async (req, res, next) => {
-    const user = sanitize(req.user);
+    const user = req.user;
 
     if (!user) return badRequest(req, res, "An error has occurred! We could not retrieve your profile");
 
     // get handle and other info
-    const handle = sanitize(req.body.handle);
-    const clientId = sanitize(req.body.clientId);
+    const handle = req.body.handle;
+    const clientId = req.body.clientId;
 
     // if one of them isn't preset, badRequest it
     if (!clientId || !handle) return badRequest(req, res, "Invalid parameters");
@@ -104,14 +104,14 @@ router.post('/queue', verifyToken, async (req, res, next) => {
     if (!existingClient) return badRequest(req, res, "A client that you own with that clientId does not exist");
 
     // get message
-    const messages = sanitize(req.body.messages);
+    const message = req.body.message;
 
-    if (!messages) return badRequest(req, res, "You have not provided a message");
+    if (!message) return badRequest(req, res, "You have not provided a message");
 
-    //TODO send message through sockets (array, so loop)
+    //TODO send message through sockets
 
     // finished! Tell em it was all god
-    res.status(200).send({response: {result: "Queued new message", messages: messages}});
+    res.status(200).send({response: {result: "Queued new message", message: message}});
 });
 
 /**
@@ -124,7 +124,7 @@ router.post('/queue', verifyToken, async (req, res, next) => {
 async function verifyToken(req, res, next) {
 
     // get JWT token for session
-    const token = sanitize(req.cookies.token);
+    const token = req.cookies.token;
 
     if (!token) {
         return deny(req, res, "Invalid token");
@@ -149,6 +149,7 @@ async function verifyToken(req, res, next) {
     } catch (e) {
         return deny(req, res, "Invalid token");
     }
+
     req.user = user;
 
     next();

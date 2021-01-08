@@ -1,5 +1,4 @@
-const sanitize = require('mongo-sanitize');
-const Client = require('../model/user');
+const Client = require('../model/client');
 
 let clients = new Map();
 
@@ -23,16 +22,16 @@ module.exports = function (io) {
         // chat message
         socket.on('connect credentials', async (msg) => {
             const credentials = msg;
-            const clientId = sanitize(credentials.clientId);
-            const clientToken = sanitize(credentials.clientToken);
+            const clientId = credentials.clientId;
+            const clientToken = credentials.clientToken;
 
             console.log("User with id '" + socket.id + "' sent credentials -> clientId: " + clientId + ", clientToken: " + clientToken);
 
             // search for credentials in database
-            const client = await Client.findOne({clientId: clientId, clientToken: clientToken});
+            const client = await Client.findOne({"clientId": clientId, "clientToken": clientToken});
 
             // if no client, send message back
-            if (client == null) {
+            if (!client) {
                 socket.emit("response", {
                     "error": true,
                     "message": "Invalid id or token"
@@ -40,6 +39,11 @@ module.exports = function (io) {
 
                 // disconnect socket
                 socket.disconnect();
+            } else {
+                socket.emit("response", {
+                    "error": false,
+                    "message": "Success"
+                });
             }
         });
     });
