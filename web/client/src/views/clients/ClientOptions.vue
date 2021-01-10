@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    Client Options - For client with id: {{ $route.params.id }}
+    Client Options - For client with id: {{ $route.params.handle }}
   </div>
 </template>
 

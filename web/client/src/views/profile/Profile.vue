@@ -58,18 +58,15 @@ export default {
 }
 
 .section {
-
   text-align: center;
   font-family: Inter, sans-serif;
 
   .title {
-
     font-weight: 900;
     font-size: 50px;
   }
 
   .subtitle {
-
     font-weight: 600;
     font-size: 30px;
 
@@ -79,10 +76,8 @@ export default {
 }
 
 .section-2 {
-
   text-align: center;
   padding-top: 5rem;
-
 }
 
 </style>
