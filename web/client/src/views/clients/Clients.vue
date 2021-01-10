@@ -7,14 +7,30 @@
             <div class="title">Clients</div>
           </b-col>
         </b-row>
-        <b-row class="section-2">
-          <b-table hover :fields="fields" :items="items">
+        <b-row class="section-2 overflow-auto">
+          <b-table
+              id="client-table"
+              hover
+              :busy.sync="isBusy"
+              :fields="fields"
+              :items="provider"
+              :per-page="limit"
+              :current-page="currentPage">
             <template #cell(view)="data">
-              <router-link :to="{path: '/clients/' + data.item.client_handle + '/options'}">
-                <b-button squared variant="outline-primary">Explore</b-button>
+              <router-link :to="{path: '/clients/' + data.item.clientId + '/options'}">
+                <b-button size="sm" squared variant="outline-primary">Explore</b-button>
               </router-link>
             </template>
           </b-table>
+        </b-row>
+        <b-row class="justify-content-center section-3">
+          <b-pagination
+              :total-rows="rows"
+              v-model="currentPage"
+              :per-page="limit"
+              aria-controls="client-table"
+              align="fill">
+          </b-pagination>
         </b-row>
       </b-container>
     </div>
@@ -22,22 +38,43 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: 'Clients',
   data() {
     return {
-      //TODO make this use the api to retrieve data
+      limit: 6,
+      currentPage: 1,
+      rows: 1,
+      isBusy: false,
       fields: [
-        {key: 'client_handle', label: 'Client Handle'},
-        {key: 'client_id', label: 'Client ID'},
+        {key: 'handle', label: 'Client Handle'},
+        {key: 'clientId', label: 'Client ID'},
         {key: 'view', label: 'Interact'}
       ],
-      items: [
-        {client_handle: "handle_here", client_id: "id_here"},
-        {client_handle: "handle_here", client_id: 'id_here'},
-        {client_handle: "handle_here", client_id: 'id_here'},
-        {client_handle: "handle_here", client_id: 'id_here'}
-      ]
+    }
+  },
+  methods: {
+    provider(ctx) {
+      // Here we don't set isBusy prop, so busy state will be
+      // handled by table itself
+      // this.isBusy = true
+      let promise = axios.post(process.env.VUE_APP_API_URL + process.env.VUE_APP_CLIENTS_QUERY_PATH + "?page=" + ctx.currentPage + "&limit=" + ctx.perPage, {}, {withCredentials: true});
+
+      return promise.then((data) => {
+        const items = data.data.response.clients.docs;
+        this.rows = data.data.response.clients.total;
+        // Here we could override the busy state, setting isBusy to false
+        // this.isBusy = false
+        return (items)
+      }).catch(() => {
+        // Here we could override the busy state, setting isBusy to false
+        // this.isBusy = false
+        // Returning an empty array, allows table to correctly handle
+        // internal busy state in case of error
+        return []
+      })
     }
   }
 };

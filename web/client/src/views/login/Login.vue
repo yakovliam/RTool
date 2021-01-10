@@ -97,7 +97,10 @@ export default {
         // redirect to profile
         this.$router.push({name: 'profile'});
       }).catch(err => {
-        this.alertText = err.response.data.response;
+        if (err.response.data.response)
+          this.alertText = err.response.data.response;
+        else
+          this.alertText = "An error has occurred";
         this.alert = true;
       });
     }

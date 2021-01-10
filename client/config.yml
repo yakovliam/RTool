@@ -1,4 +1,4 @@
-clientId: "the_client_id"
-clientToken: "the_client_token"
+clientId: "test_id"
+clientToken: "test_token"
 host: "http://localhost:3000"
 connectionDelay: 60

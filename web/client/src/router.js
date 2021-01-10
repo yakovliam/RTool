@@ -72,7 +72,7 @@ const router = new VueRouter({
                     }
                 },
                 {
-                    path: ':handle/options',
+                    path: ':clientId/options',
                     name: 'clientoptions',
                     component: ClientOptions,
                     meta: {

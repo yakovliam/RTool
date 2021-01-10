@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require('mongoose-paginate');
 
-const ClientSchema = new mongoose.Schema({
+let ClientSchema = new mongoose.Schema({
     // the identifier / handle of the client
     handle: {
         type: String,
@@ -8,7 +9,7 @@ const ClientSchema = new mongoose.Schema({
         min: 3
     },
     // the user who created the client
-    creator: {
+    creatorId: {
         type: mongoose.Types.ObjectId,
         required: true
     },
@@ -33,5 +34,8 @@ const ClientSchema = new mongoose.Schema({
         default: new Date()
     }
 });
+
+// set up pagination
+ClientSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("Client", ClientSchema);
