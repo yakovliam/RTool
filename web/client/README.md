@@ -1,4 +1,4 @@
-# client
+# RTool Web Client
 
 ## Project setup
 ```

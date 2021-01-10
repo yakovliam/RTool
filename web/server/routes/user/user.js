@@ -77,7 +77,8 @@ router.post('/login', async (req, res) => {
     /* does it comply with general validation? */
     const {error} = Validate.loginSchema.validate({email: email, password: password});
     if (error) {
-        return badRequest(req, res, error.details[0].message);
+        return deny(req, res, "Incorrect Email or Password!");
+        // return badRequest(req, res, error.details[0].message);
     }
 
     /* check existence */

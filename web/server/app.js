@@ -33,7 +33,7 @@ app.use(limiter);
 // middleware
 const corsOptions = {
     allRoutes: true,
-    origin: 'http://localhost:3001',
+    origin: 'http://localhost:8080',
     credentials: true,
     methods: 'GET, POST, PUT, DELETE, OPTIONS, HEAD',
     headers: 'content-type'
