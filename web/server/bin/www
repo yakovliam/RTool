@@ -32,7 +32,7 @@ server.on('listening', onListening);
 /**
  * Socket.io
  */
-let io = app.io
+let io = app.get('io');
 io.attach(server);
 
 /**

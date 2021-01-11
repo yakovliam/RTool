@@ -7,20 +7,21 @@
             <div class="title"> Explore Client</div>
             <div class="subtitle">
               {{ this.clientHandle }}
+              <status-indicator v-bind:status="connectivityStatus"/>
             </div>
           </b-col>
         </b-row>
         <b-row class="justify-content-center section-2">
           <b-col xl="10" lg="10" md="10" align-self="center">
             <div class="shadow-lg rounded-lg">
-              <b-alert :show="showAlert" dismissible @dismissed="showAlert = false" v-bind:variant="alertType">{{
-                  this.alertText
-                }}
-              </b-alert>
-              <div class="title">
-                Options
-              </div>
               <div class="options">
+                <b-alert :show="showAlert" dismissible @dismissed="showAlert = false" v-bind:variant="alertType">{{
+                    this.alertText
+                  }}
+                </b-alert>
+                <div class="title">
+                  Options
+                </div>
                 <b-form-group
                     id="edit-clientHandle"
                     label-cols-sm="4"
@@ -80,6 +81,8 @@ export default {
       showAlert: false,
       alertText: "",
       alertType: "",
+      box: "",
+      connectivityStatus: "negative"
     }
   },
   mounted: async function () {
@@ -92,9 +95,14 @@ export default {
           this.clientHandle = this.client.handle;
           this.clientId = this.client.clientId;
           this.clientToken = this.client.clientToken;
+          // also connectivity
+          if (response.data.response.connected) {
+            this.connectivityStatus = "positive";
+          }
+
         }).catch(() => {
           // send back to clients page
-          this.$router.push({name: 'clients'});
+          this.$router.push({name: 'clientshome'});
         });
   },
   methods: {
@@ -121,23 +129,45 @@ export default {
           });
     },
     deleteClient: async function () {
-      // delete client
-      await axios.post(process.env.VUE_APP_API_URL + process.env.VUE_APP_CLIENT_DELETE_PATH,
-          {clientId: this.clientId},
-          {withCredentials: true})
-          .then(() => {
-            // redirect to '/clients'
-            this.$router.push({name: 'clients'});
-          }).catch((error) => {
-            this.alertType = "danger";
-            // get error message, display as alert
-            if (error.response.data.response) {
-              this.alertText = error.response.data.response;
-            } else {
-              this.alertText = "An error has occurred";
+      // confirm deletion
+      this.box = "";
+      this.$bvModal.msgBoxConfirm('Please confirm the deletion of this client.', {
+        title: 'Please Confirm',
+        size: 'sm',
+        buttonSize: 'sm',
+        okVariant: 'danger',
+        okTitle: 'YES',
+        cancelTitle: 'NO',
+        hideHeaderClose: false,
+        centered: true
+      })
+          .then(async (value) => {
+            this.box = value;
+            // if true, delete
+            if (this.box === true) {
+              // delete client
+              await axios.post(process.env.VUE_APP_API_URL + process.env.VUE_APP_CLIENT_DELETE_PATH,
+                  {clientId: this.clientId},
+                  {withCredentials: true})
+                  .then(() => {
+                    // redirect to '/clients'
+                    this.$router.push({name: 'clientshome'});
+                  }).catch((error) => {
+                    this.alertType = "danger";
+                    // get error message, display as alert
+                    if (error.response.data.response) {
+                      this.alertText = error.response.data.response;
+                    } else {
+                      this.alertText = "An error has occurred";
+                    }
+                    this.showAlert = true;
+                  });
             }
-            this.showAlert = true;
+          })
+          .catch(() => {
+            // do nothing
           });
+
     }
   }
 };
@@ -183,14 +213,15 @@ export default {
   text-align: center;
   font-family: Inter, sans-serif;
 
-  .title {
-    padding-top: 30px;
-    font-weight: 500;
-    font-size: 30px;
-  }
-
   .options {
-    padding: 20px 20px;
+
+    .title {
+      font-weight: 500;
+      font-size: 30px;
+      padding-bottom: 20px;
+    }
+
+    padding: 30px 20px 20px;
   }
 }
 

@@ -69,7 +69,8 @@ mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true}, () => {
  * @type {*}
  */
 let io = socket_io();
-app.io = io;
-require('./io/socket')(io);
+app.set("io", io);
+let socketManager = require('./io/socket')(io);
+app.set('socketManager', socketManager);
 
 module.exports = app;

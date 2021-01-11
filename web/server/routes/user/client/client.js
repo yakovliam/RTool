@@ -27,15 +27,12 @@ router.post('/create', verifyToken, async (req, res, next) => {
     if (!handle || !clientId || !clientToken) return badRequest(req, res, "Invalid parameters");
 
 
-    // make sure one didn't exist before with the same clientId OR handle
-    const existingClient = await Client.findOne({
-        $or: [
-            {clientId: clientId},
-            {handle: handle}
-        ]
-    });
+    // make sure one didn't exist before with the same clientId
+    const existingClient = await Client.findOne(
+        {clientId: clientId}
+    );
 
-    if (existingClient) return badRequest(req, res, "A client with either that handle or clientId already exists");
+    if (existingClient) return badRequest(req, res, "A client with either that clientId already exists");
 
     // create new object
     const client = await Client.create({
@@ -134,8 +131,19 @@ router.post('/get', verifyToken, async (req, res, next) => {
 
     if (!existingClient) return badRequest(req, res, "A client that you own with that clientId does not exist");
 
+    // get the connection status of the client
+    const clients = req.app.get('socketManager').clients;
+
+
+    const connected = new Map(
+        [...clients]
+            .filter(([id, obj]) => {
+                return obj.clientObject.clientId === clientId;
+            })).size >= 1;
+
+
     // finished! Tell em it was all good
-    res.status(200).send({response: {client: existingClient}});
+    res.status(200).send({response: {client: existingClient, connected: connected}});
 });
 
 /**
@@ -256,6 +264,5 @@ const badRequest = async (req, res, message) => {
 const deny = async (req, res, message) => {
     res.status(403).send({response: message});
 };
-
 
 module.exports = router;

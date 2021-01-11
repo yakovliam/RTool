@@ -95,7 +95,7 @@ export default {
         password: this.password
       }, {withCredentials: true}).then(() => {
         // redirect to profile
-        this.$router.push({name: 'profile'});
+        this.$router.push({name: 'profilehome'});
       }).catch(err => {
         if (err.response.data.response)
           this.alertText = err.response.data.response;

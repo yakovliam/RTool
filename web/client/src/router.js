@@ -9,6 +9,7 @@ import ClientOptions from "@/views/clients/ClientOptions";
 import ProfileIndex from "@/views/profile/ProfileIndex";
 import ClientsIndex from "@/views/clients/ClientsIndex";
 import {bus} from "@/main";
+import NewClient from "@/views/clients/NewClient";
 
 // create router
 const router = new VueRouter({
@@ -72,6 +73,14 @@ const router = new VueRouter({
                     }
                 },
                 {
+                    path: 'new',
+                    name: 'newclient',
+                    component: NewClient,
+                    meta: {
+                        requiresAuth: true
+                    }
+                },
+                {
                     path: ':clientId/options',
                     name: 'clientoptions',
                     component: ClientOptions,
@@ -95,8 +104,17 @@ const router = new VueRouter({
 
 // set authentication
 router.beforeEach(async (to, from, next) => {
+    const isAuthed = await isAuthenticated();
+
+    // if not authed, remove user (just in case)
+    if(!isAuthed) {
+        localStorage.removeItem("user");
+        // update components
+        updateDynamicComponents();
+    }
+
     // if we going TO login and we are authenticated, just skip it and go to profile
-    if (to.name === 'login' && await isAuthenticated()) {
+    if (to.name === 'login' && isAuthed) {
         updateDynamicComponents();
         next('/profile');
         return;
@@ -104,7 +122,7 @@ router.beforeEach(async (to, from, next) => {
 
     if (to.meta.requiresAuth) { // if it requires auth
         // are we authenticated
-        if (await isAuthenticated()) {
+        if (isAuthed) {
             updateDynamicComponents();
             next();
         } else {

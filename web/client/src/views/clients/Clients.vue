@@ -7,7 +7,10 @@
             <div class="title">Clients</div>
           </b-col>
         </b-row>
-        <b-row class="section-2 overflow-auto">
+        <b-row class="section-2 overflow-auto" align-h="center">
+          <router-link to="/clients/new">
+            <b-button class="new-button" squared variant="outline-primary">NEW</b-button>
+          </router-link>
           <b-table
               id="client-table"
               hover
@@ -17,7 +20,7 @@
               :per-page="limit"
               :current-page="currentPage">
             <template #cell(view)="data">
-              <router-link :to="{path: '/clients/' + data.item.clientId + '/options'}">
+              <router-link :to="{path: '/clients/' + encodeURIComponent(data.item.clientId) + '/options'}">
                 <b-button size="sm" squared variant="outline-primary">Explore</b-button>
               </router-link>
             </template>
@@ -119,6 +122,10 @@ export default {
 
   font-family: Inter, sans-serif;
   font-weight: 400;
+
+  .new-button {
+    margin-bottom: 20px;
+  }
 }
 
 </style>

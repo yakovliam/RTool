@@ -1,20 +1,25 @@
 const Client = require('../model/client');
 
-let clients = new Map();
+
+class SocketManager {
+    clients = new Map();
+}
+
+let socketManager = new SocketManager();
 
 module.exports = function (io) {
 
     // connection
     io.on('connection', function (socket) {
         // add client to map
-        clients.set(socket.id, socket);
+        socketManager.clients.set(socket.id, {socket: socket, clientObject: null});
 
         console.log("User with id '" + socket.id + "' has connected");
 
         // disconnect
         socket.on('disconnect', () => {
             // remove client from map
-            clients.delete(socket.id);
+            socketManager.clients.delete(socket.id);
 
             console.log("User with id '" + socket.id + "' disconnected");
         });
@@ -44,7 +49,12 @@ module.exports = function (io) {
                     "error": false,
                     "message": "Success"
                 });
+
+                // set object in map
+                socketManager.clients.set(socket.id, {socket: socket, clientObject: client});
             }
         });
     });
+
+    return socketManager;
 }
