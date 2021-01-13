@@ -1,5 +1,5 @@
 const Client = require('../model/client');
-
+const fs = require('fs');
 
 class SocketManager {
     clients = new Map();
@@ -7,10 +7,23 @@ class SocketManager {
 
 let socketManager = new SocketManager();
 
+let verifySocketMessage = function (socket) {
+    const exists = socketManager.clients.get(socket.id).clientObject;
+    if (!exists) {
+        console.log("User with id '" + socket.id + "' has failed the verification test and will be disconnected");
+        // disconnect socket
+        socket.disconnect();
+    }
+
+    // return
+    return exists;
+}
+
 module.exports = function (io) {
 
     // connection
     io.on('connection', function (socket) {
+
         // add client to map
         socketManager.clients.set(socket.id, {socket: socket, clientObject: null});
 
@@ -25,7 +38,7 @@ module.exports = function (io) {
         });
 
         // chat message
-        socket.on('connect credentials', async (msg) => {
+        socket.on('connect credentials', async function (msg) {
             const credentials = msg;
             const clientId = credentials.clientId;
             const clientToken = credentials.clientToken;
@@ -54,6 +67,28 @@ module.exports = function (io) {
                 socketManager.clients.set(socket.id, {socket: socket, clientObject: client});
             }
         });
+
+        // screencap
+        socket.on('screencap', function (msg) {
+            if (!verifySocketMessage(socket)) return;
+
+            console.log("User with id '" + socket.id + " sent a screen-capture");
+
+            const screencap = msg.data;
+            const client = socketManager.clients.get(socket.id).clientObject;
+
+            const dir = "./media/" + client.clientId + "/";
+
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir);
+            }
+
+            fs.writeFile(dir + "screencap.jpg", screencap, 'base64', function (err) {
+                if (err)
+                    console.log("Error writing screen-capture file: " + err);
+            });
+
+        })
     });
 
     return socketManager;

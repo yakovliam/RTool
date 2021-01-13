@@ -1,18 +1,6 @@
-const NodeMediaServer = require('node-media-server');
+const node_media_server = require('./media_server');
 
-const config = {
-    rtmp: {
-        port: 1935,
-        chunk_size: 60000,
-        gop_cache: true,
-        ping: 30,
-        ping_timeout: 60
-    },
-    http: {
-        port: 8000,
-        allow_origin: '*'
-    }
-};
+// and call run() method at the end
+// file where we start our web server
 
-const nms = new NodeMediaServer(config);
-nms.run();
+node_media_server.run();

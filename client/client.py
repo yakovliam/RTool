@@ -1,6 +1,6 @@
 import file.config as config
 import socketio
-import command.command as command
+import command.command as cmd
 import time
 import file.log as log
 
@@ -53,7 +53,6 @@ def response(data):
 
     print("Received Response -> " + str(data))
 
-
 # on message
 @sio.on("message")
 def message(data):
@@ -73,7 +72,7 @@ def command(data):
 
     try:
         # run command
-        command.run_command(data)
+        cmd.run_command(data, sio)
     except Exception as e:
         # log
         log.log(log.LogType.ERROR,
